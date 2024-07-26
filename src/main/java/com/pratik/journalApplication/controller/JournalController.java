@@ -4,6 +4,8 @@ import com.pratik.journalApplication.entity.JournalEntry;
 import com.pratik.journalApplication.service.JournalEntryService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -24,16 +26,20 @@ public class JournalController {
     }
 
     @PostMapping
-    public JournalEntry createEntry(@RequestBody JournalEntry entry){
+    public ResponseEntity<JournalEntry> createEntry(@RequestBody JournalEntry entry){
         entry.setDate(LocalDateTime.now());
         journalEntryService.saveEntry(entry);
-        return entry;
+        return new ResponseEntity<>(entry, HttpStatus.CREATED);
 
     }
 
     @GetMapping("/id/{myId}")
-    public JournalEntry getJournalEntryById(@PathVariable ObjectId myId){
-        return journalEntryService.findById(myId).orElse(null);
+    public ResponseEntity<JournalEntry> getJournalEntryById(@PathVariable ObjectId myId){
+        Optional<JournalEntry> journalEntry = journalEntryService.findById(myId);
+        if(journalEntry.isPresent()){
+            return new ResponseEntity<>(journalEntry.get(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>( HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("/id/{myId}")
