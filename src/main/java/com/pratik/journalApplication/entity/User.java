@@ -13,6 +13,7 @@ import java.util.*;
 
 @Document(collection = "users")
 @Data
+@NoArgsConstructor
 public class User {
 
     @Id

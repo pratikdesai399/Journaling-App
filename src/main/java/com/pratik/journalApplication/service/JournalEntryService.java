@@ -1,12 +1,12 @@
 package com.pratik.journalApplication.service;
 
 import com.pratik.journalApplication.entity.JournalEntry;
+import com.pratik.journalApplication.entity.User;
 import com.pratik.journalApplication.repository.JournalEntryRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Component
@@ -15,12 +15,18 @@ public class JournalEntryService {
     @Autowired
     private JournalEntryRepository journalEntryRepository;
 
+    @Autowired
+    private UserService userService;
+
     public List<JournalEntry> getAll(){
        return journalEntryRepository.findAll();
     }
 
-    public void saveEntry(JournalEntry journalEntry){
-        journalEntryRepository.save(journalEntry);
+    public void saveEntry(JournalEntry journalEntry, String username){
+        User user = userService.findByUsername(username);
+        JournalEntry savedEntry = journalEntryRepository.save(journalEntry);
+        user.getJournalEntryList().add(savedEntry);
+        userService.createUser(user);
     }
 
     public Optional<JournalEntry> findById(ObjectId id){
