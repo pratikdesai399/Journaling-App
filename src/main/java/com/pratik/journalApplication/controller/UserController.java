@@ -22,16 +22,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping
-    public List<User> getAll(){
-        return userService.getAll();
-    }
-
-    @PostMapping
-    public void createUser(@RequestBody User user){
-        userService.createUser(user);
-    }
-
     @PutMapping("/{userName}")
     public void updateUser(@RequestBody User user, @PathVariable String userName){
         User userInDb = userService.findByUsername(userName);

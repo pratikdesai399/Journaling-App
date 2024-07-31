@@ -6,6 +6,7 @@ import com.pratik.journalApplication.repository.JournalEntryRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -22,11 +23,16 @@ public class JournalEntryService {
        return journalEntryRepository.findAll();
     }
 
+    @Transactional
     public void saveEntry(JournalEntry journalEntry, String username){
-        User user = userService.findByUsername(username);
-        JournalEntry savedEntry = journalEntryRepository.save(journalEntry);
-        user.getJournalEntryList().add(savedEntry);
-        userService.createUser(user);
+        try {
+            User user = userService.findByUsername(username);
+            JournalEntry savedEntry = journalEntryRepository.save(journalEntry);
+            user.getJournalEntryList().add(savedEntry);
+            userService.createUser(user);
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }
     }
 
     public void saveEntry(JournalEntry journalEntry){
