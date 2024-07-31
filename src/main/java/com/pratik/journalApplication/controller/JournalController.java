@@ -51,21 +51,21 @@ public class JournalController {
         return new ResponseEntity<>( HttpStatus.NOT_FOUND);
     }
 
-    @DeleteMapping("/id/{myId}")
-    public ResponseEntity<?> deleteJournalEntryById(@PathVariable ObjectId myId){
-        journalEntryService.deleteById(myId);
+    @DeleteMapping("/id/{username}/{myId}")
+    public ResponseEntity<?> deleteJournalEntryById(@PathVariable ObjectId myId, @PathVariable String username){
+        journalEntryService.deleteById(myId, username);
         return new ResponseEntity<>( HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("/id/{myId}")
-    public ResponseEntity<?> updateJournalEntryById(@PathVariable ObjectId myId, @RequestBody JournalEntry entry){
-//        JournalEntry oldEntry = journalEntryService.findById(myId).orElse(null);
-//        if(oldEntry != null){
-//            oldEntry.setTitle(entry.getTitle() != null && !entry.getTitle().isEmpty()? entry.getTitle() : oldEntry.getTitle());
-//            oldEntry.setContent(entry.getContent() != null && !entry.getContent().isEmpty() ? entry.getContent() : oldEntry.getContent());
-//            journalEntryService.saveEntry(oldEntry, user);
-//            return new ResponseEntity<>( oldEntry, HttpStatus.OK);
-//        }
+    @PutMapping("/id/{username}/{myId}")
+    public ResponseEntity<?> updateJournalEntryById(@PathVariable ObjectId myId, @PathVariable String username, @RequestBody JournalEntry entry){
+        JournalEntry oldEntry = journalEntryService.findById(myId).orElse(null);
+        if(oldEntry != null){
+            oldEntry.setTitle(entry.getTitle() != null && !entry.getTitle().isEmpty()? entry.getTitle() : oldEntry.getTitle());
+            oldEntry.setContent(entry.getContent() != null && !entry.getContent().isEmpty() ? entry.getContent() : oldEntry.getContent());
+            journalEntryService.saveEntry(oldEntry);
+            return new ResponseEntity<>( oldEntry, HttpStatus.OK);
+        }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }
