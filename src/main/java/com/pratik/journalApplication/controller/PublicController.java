@@ -17,12 +17,12 @@ public class PublicController {
     @Autowired
     private UserService userService;
 
-    @PostMapping
+    @PostMapping("/create-user")
     public void createUser(@RequestBody User user){
         userService.createUser(user);
     }
 
-    @GetMapping
+    @GetMapping("/get-all-users")
     public List<User> getAll(){
         return userService.getAll();
     }
