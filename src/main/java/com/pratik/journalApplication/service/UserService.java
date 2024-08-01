@@ -1,8 +1,6 @@
 package com.pratik.journalApplication.service;
 
-import com.pratik.journalApplication.entity.JournalEntry;
 import com.pratik.journalApplication.entity.User;
-import com.pratik.journalApplication.repository.JournalEntryRepository;
 import com.pratik.journalApplication.repository.UserRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +8,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,9 +24,13 @@ public class UserService {
     }
 
 
-    public void createUser(User user){
+    public void createNewUser(User user){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoles(List.of("USER"));
+        userRepository.save(user);
+    }
+
+    public void createUser(User user){
         userRepository.save(user);
     }
 

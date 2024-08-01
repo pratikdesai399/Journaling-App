@@ -28,7 +28,7 @@ public class UserController {
         if(userInDb != null){
             userInDb.setUsername(user.getUsername());
             userInDb.setPassword(user.getPassword());
-            userService.createUser(userInDb);
+            userService.createNewUser(userInDb);
         }
     }
 
