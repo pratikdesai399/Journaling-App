@@ -29,5 +29,6 @@ public class AdminController {
     @PostMapping("/add-new-admin")
     public void addNewAdmin(@RequestBody User user){
         userService.saveAdmin(user);
+        //Comment
     }
 }
